@@ -33,7 +33,7 @@ class Bot(commands.Bot):
         if(message.author.bot != True and not message.content.startswith(("!", "&", "https://"))):
             await self.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ',
                                     message.created_at,
-                                    message.content,
+                                    message.clean_content,
                                     message.id,
                                     message.author.id,
                                     message.channel.id,
@@ -48,19 +48,19 @@ bot = Bot()
 async def ping(ctx):
     await ctx.send('pong :)')
 
-
-@bot.command()
-async def getchannelhistory(ctx):
-    channel = ctx.message.channel
-    async for ctx.message in channel.history(limit=50000):
-        if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://"))):
-            await bot.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ',
-                                   ctx.message.created_at,
-                                   ctx.message.content,
-                                   ctx.message.id,
-                                   ctx.message.author.id,
-                                   ctx.message.channel.id,
-                                   ctx.message.guild.id)
+#Command used to fill up the DB...
+#@bot.command()
+#async def getchannelhistory(ctx):
+#    channel = ctx.message.channel
+#    async for ctx.message in channel.history(limit=50000):
+#        if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://"))):
+#            await bot.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ',
+#                                   ctx.message.created_at,
+#                                   ctx.message.clean_content,
+#                                   ctx.message.id,
+#                                   ctx.message.author.id,
+#                                   ctx.message.channel.id,
+#                                   ctx.message.guild.id)
 
 
 if __name__ == '__main__':
