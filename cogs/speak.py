@@ -8,8 +8,9 @@ import config
 import markovify
 import functools
 
+
 class speak(commands.Cog):
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
@@ -23,7 +24,7 @@ class speak(commands.Cog):
             user = ctx.message.author
             repeats = 5
         elif len(args) == 1:
-            # If the user only provided one argument, we need to check if 
+            # If the user only provided one argument, we need to check if
             # The argument is repeats or a member to generate sentences from
             if args[0].isdigit() and int(args[0]) < 1000:
                 user = ctx.author
@@ -45,17 +46,20 @@ class speak(commands.Cog):
                 user = await member_converter.convert(ctx, a)
 
         # user = ctx.message.author if member is None else member
-        query = "SELECT content FROM messages WHERE author_id=$1 AND guild_id=$2 ORDER BY timestamp DESC LIMIT 20000;"
+        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 ORDER BY timestamp DESC LIMIT 20000;"
         try:
-            record = await ctx.db.fetch(query, user.id, ctx.guild.id, timeout=5.0)
+            print(query)
+            print(user.id)
+            print(ctx.guild.id)
+            record = await self.bot.pool.fetch(query, user.id, ctx.guild.id, timeout=5.0)
         except AttributeError:
-            return await ctx.send("Fixa en databas martin, förfan")
+            return await ctx.send("Något gick fel i queryn..")
         except Exception:
             return await ctx.send("Timade ut, databasproblem?")
         thing = functools.partial(self.sync_speak, record, user, repeats)
         speech = await self.bot.loop.run_in_executor(None, thing)
         if speech == -1:
-            return await ctx.send("Skriv mer, för lite text att bygga meningar av")
+            return await ctx.send("Skriv lite mer, för lite text att bygga meningar av")
 
         await ctx.send(speech)
 
@@ -75,6 +79,7 @@ class speak(commands.Cog):
             except:
                 continue
         return speech
+
 
 def setup(bot):
     bot.add_cog(speak(bot))
