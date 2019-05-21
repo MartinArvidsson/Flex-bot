@@ -21,16 +21,17 @@ class pairspeak(commands.Cog):
         """
         member_converter = BetterMember()
         if not args:
-            user = ctx.message.author
-            repeats = 5
+             return await ctx.send("behöver minst en person som argument exempel 'Pairspeak Martin' ")
         elif len(args) == 1:
-            # If the user only provided one argument, we need to check if
-            # The argument is repeats or a member to generate sentences from
-            if args[0].isdigit() and int(args[0]) < 1000:
+            # If the user only provided one argument, it will be the user to pairspeak with
                 user = ctx.author
-                repeats = int(args[0])
-            else:
+                userTwo = await member_converter.convert(ctx, args[0])
+                repeats = 5
+        
+        elif len(args) == 2:
+            # I)f the user provided two arguments, build a scentence from both users
                 user = await member_converter.convert(ctx, args[0])
+                userTwo = await member_converter.convert(ctx, args[1])
                 repeats = 5
         else:
             a, b, *_ = args
@@ -48,29 +49,34 @@ class pairspeak(commands.Cog):
         # user = ctx.message.author if member is None else member
         query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 ORDER BY timestamp DESC LIMIT 20000;"
         try:
-            record = await self.bot.pool.fetch(query, user.id, ctx.guild.id, timeout=5.0)
+            firstRecord = await self.bot.pool.fetch(query, user.id, ctx.guild.id, timeout=5.0)
+            secondRecord = await self.bot.pool.fetch(query, userTwo.id, ctx.guild.id, timeout=5.0)
         except AttributeError:
             return await ctx.send("Något gick fel i queryn..")
         except Exception:
             return await ctx.send("Timade ut, databasproblem?")
-        thing = functools.partial(self.sync_speak, record, user, repeats)
+        thing = functools.partial(self.sync_speak, firstRecord, secondRecord, user, userTwo, repeats)
         speech = await self.bot.loop.run_in_executor(None, thing)
         if speech == -1:
             return await ctx.send("Skriv lite mer, för lite text att bygga meningar av")
 
         await ctx.send(speech)
 
-    def sync_speak(self, record, user, repeats):
-        text = '\n'.join([x[0] for x in record if len(x[0]) > 20])
+    def sync_speak(self, firstRecord, secondRecord, user, userTwo, repeats):
+        firstText = '\n'.join([x[0] for x in firstRecord if len(x[0]) > 20])
+        secondText = '\n'.join([x[0] for x in secondRecord if len(x[0]) > 20])
         try:
-            text_model = markovify.NewlineText(text)
+            text_model_one = markovify.NewlineText(firstText)
+            text_model_two = markovify.NewlineText(secondText)
+            combined_models = markovify.combine([text_model_one,text_model_two])
         except Exception as e:
+            print(e)
             return -1
-        speech = "**{}:**\n".format(user.name)
+        speech = "**{}:**\n".format((user.name, userTwo.name))
         repeats = min(repeats, 20)
         for _ in range(repeats):
             try:
-                variablename = text_model.make_short_sentence(
+                variablename = combined_models.make_short_sentence(
                     140, state_size=2)
                 speech += "{}\n\n".format(variablename)
             except:
