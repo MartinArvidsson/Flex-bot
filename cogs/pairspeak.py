@@ -24,15 +24,21 @@ class pairspeak(commands.Cog):
              return await ctx.send("behöver minst en person som argument exempel 'Pairspeak Martin' ")
         elif len(args) == 1:
             # If the user only provided one argument, it will be the user to pairspeak with
-                user = ctx.author
+            user = ctx.author
+            try:
                 userTwo = await member_converter.convert(ctx, args[0])
-                repeats = 5
+            except:
+                return await ctx.send("Felstavat argument, skrev du rätt person du ville pairspeaka med?")
+            repeats = 5
         
         elif len(args) == 2:
             # I)f the user provided two arguments, build a scentence from both users
+            try:
                 user = await member_converter.convert(ctx, args[0])
                 userTwo = await member_converter.convert(ctx, args[1])
-                repeats = 5
+            except:
+                return await ctx.send("Felstavat argument, skrev du rätt person du ville pairspeaka med?")
+            repeats = 5
         else:
             a, b, *_ = args
             if a.isdigit() and int(a) < 1000:
@@ -43,7 +49,7 @@ class pairspeak(commands.Cog):
                 try:
                     repeats = int(b)
                 except ValueError:
-                    return await ctx.send("Not sure what to make of what you said, please supply a member and or number of repeats (or nothing).")
+                    return await ctx.send("Något gick snett, för många argument?")
                 user = await member_converter.convert(ctx, a)
 
         # user = ctx.message.author if member is None else member
@@ -72,7 +78,7 @@ class pairspeak(commands.Cog):
         except Exception as e:
             print(e)
             return -1
-        speech = "**{}:**\n".format((user.name, userTwo.name))
+        speech = "**{} & {}:**\n".format(user.name, userTwo.name)
         repeats = min(repeats, 20)
         for _ in range(repeats):
             try:

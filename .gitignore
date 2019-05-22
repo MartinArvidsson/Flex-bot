@@ -23,6 +23,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+venv/
+.vscode
 
 # Our configuration files
 config.py
