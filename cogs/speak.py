@@ -46,9 +46,9 @@ class speak(commands.Cog):
                 user = await member_converter.convert(ctx, a)
 
         # user = ctx.message.author if member is None else member
-        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 ORDER BY timestamp DESC LIMIT 20000;"
+        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY timestamp DESC LIMIT 20000;"
         try:
-            record = await self.bot.pool.fetch(query, user.id, ctx.guild.id, timeout=5.0)
+            record = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
         except AttributeError:
             return await ctx.send("Något gick fel i queryn..")
         except Exception:
