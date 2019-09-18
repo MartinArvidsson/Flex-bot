@@ -13,7 +13,7 @@ class pairspeak(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.group(invoke_without_command=True, case_insensitive=True, name="pairspeak", aliases=["ps"])
     async def pairspeak(self, ctx, *args):
         """
         Uses markov chains to come up with fake sentences that almost sound like something you would say, see subredditsimulator for something similar
@@ -56,7 +56,7 @@ class pairspeak(commands.Cog):
         query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY timestamp DESC LIMIT 20000;"
         try:
             firstRecord = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
-            secondRecord = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
+            secondRecord = await self.bot.pool.fetch(query, userTwo.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
         except AttributeError:
             return await ctx.send("Något gick fel i queryn..")
         except Exception:
@@ -83,7 +83,7 @@ class pairspeak(commands.Cog):
         for _ in range(repeats):
             try:
                 variablename = combined_models.make_short_sentence(
-                    140, state_size=2)
+                    120, state_size=5)
                 speech += "{}\n\n".format(variablename)
             except:
                 continue

@@ -13,7 +13,7 @@ class speak(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.group(invoke_without_command=True, case_insensitive=True, name="speak", aliases=["sp"])
     async def speak(self, ctx, *args):
         """
         Uses markov chains to come up with fake sentences that almost sound like something you would say, see subredditsimulator for something similar
@@ -71,7 +71,7 @@ class speak(commands.Cog):
         for _ in range(repeats):
             try:
                 variablename = text_model.make_short_sentence(
-                    140, state_size=2)
+                    120, state_size=5)
                 speech += "{}\n\n".format(variablename)
             except:
                 continue

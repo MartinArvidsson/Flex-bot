@@ -47,12 +47,13 @@ bot = Bot()
 @bot.command()
 async def ping(ctx):
     await ctx.send('pong :)')
-'''
+
 #Command used to fill up the DB...
 @bot.command()
+@commands.has_role('memelord')
 async def getchannelhistory(ctx):
     channel = ctx.message.channel
-    async for ctx.message in channel.history(limit=150000):
+    async for ctx.message in channel.history(limit=30000):
         if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://"))):
             await bot.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING',
                                    ctx.message.created_at,
@@ -61,7 +62,6 @@ async def getchannelhistory(ctx):
                                    ctx.message.author.id,
                                    ctx.message.channel.id,
                                    ctx.message.guild.id)
-'''
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
