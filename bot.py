@@ -53,7 +53,7 @@ async def ping(ctx):
 @commands.has_role('memelord')
 async def getchannelhistory(ctx):
     channel = ctx.message.channel
-    async for ctx.message in channel.history(limit=200000):
+    async for ctx.message in channel.history(limit=30000):
         if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://"))):
             await bot.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING',
                                    ctx.message.created_at,
