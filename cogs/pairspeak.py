@@ -13,7 +13,7 @@ class pairspeak(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.group(invoke_without_command=True, case_insensitive=True, name="pairspeak", aliases=["ps"])
     async def pairspeak(self, ctx, *args):
         """
         Uses markov chains to come up with fake sentences that almost sound like something you would say, see subredditsimulator for something similar
@@ -32,7 +32,7 @@ class pairspeak(commands.Cog):
             repeats = 5
         
         elif len(args) == 2:
-            # I)f the user provided two arguments, build a scentence from both users
+            # If the user provided two arguments, build a scentence from both users
             try:
                 user = await member_converter.convert(ctx, args[0])
                 userTwo = await member_converter.convert(ctx, args[1])
@@ -53,10 +53,10 @@ class pairspeak(commands.Cog):
                 user = await member_converter.convert(ctx, a)
 
         # user = ctx.message.author if member is None else member
-        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY timestamp DESC LIMIT 20000;"
+        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY random() LIMIT 20000;"
         try:
             firstRecord = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
-            secondRecord = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
+            secondRecord = await self.bot.pool.fetch(query, userTwo.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
         except AttributeError:
             return await ctx.send("Något gick fel i queryn..")
         except Exception:
@@ -82,8 +82,7 @@ class pairspeak(commands.Cog):
         repeats = min(repeats, 20)
         for _ in range(repeats):
             try:
-                variablename = combined_models.make_short_sentence(
-                    140, state_size=2)
+                variablename = combined_models.make_sentence()
                 speech += "{}\n\n".format(variablename)
             except:
                 continue

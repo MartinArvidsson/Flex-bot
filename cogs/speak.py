@@ -13,7 +13,7 @@ class speak(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(invoke_without_command=True, case_insensitive=True)
+    @commands.group(invoke_without_command=True, case_insensitive=True, name="speak", aliases=["sp"])
     async def speak(self, ctx, *args):
         """
         Uses markov chains to come up with fake sentences that almost sound like something you would say, see subredditsimulator for something similar
@@ -46,7 +46,7 @@ class speak(commands.Cog):
                 user = await member_converter.convert(ctx, a)
 
         # user = ctx.message.author if member is None else member
-        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY timestamp DESC LIMIT 20000;"
+        query = "SELECT content FROM flexbot.messages WHERE author_id=$1 AND guild_id=$2 AND channel_id =$3 ORDER BY random() LIMIT 20000;"
         try:
             record = await self.bot.pool.fetch(query, user.id, ctx.guild.id, ctx.message.channel.id, timeout=5.0)
         except AttributeError:
@@ -63,15 +63,14 @@ class speak(commands.Cog):
     def sync_speak(self, record, user, repeats):
         text = '\n'.join([x[0] for x in record if len(x[0]) > 20])
         try:
-            text_model = markovify.NewlineText(text)
+            text_model = markovify.NewlineText(text, state_size=2)
         except Exception as e:
             return -1
         speech = "**{}:**\n".format(user.name)
         repeats = min(repeats, 20)
         for _ in range(repeats):
             try:
-                variablename = text_model.make_short_sentence(
-                    140, state_size=2)
+                variablename = text_model.make_sentence()
                 speech += "{}\n\n".format(variablename)
             except:
                 continue
@@ -80,3 +79,4 @@ class speak(commands.Cog):
 
 def setup(bot):
     bot.add_cog(speak(bot))
+
