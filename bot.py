@@ -4,6 +4,8 @@
 from discord.ext import commands
 from datetime import datetime
 import discord
+intents = discord.Intents.default()
+intents.members = True
 import config
 import markovify
 import functools
@@ -13,7 +15,7 @@ import asyncio
 
 class Bot(commands.Bot):
     def __init__(self, **kwargs):
-        super().__init__(command_prefix=commands.when_mentioned_or('!'), **kwargs)
+        super().__init__(command_prefix=commands.when_mentioned_or('!'), **kwargs, intents=intents)
         for cog in config.cogs:
             try:
                 print(cog)
@@ -30,7 +32,7 @@ class Bot(commands.Bot):
             await self.change_presence(status=discord.Status.online, activity=activity)
 
     async def on_message(self, message):
-        if(message.author.bot != True and not message.content.startswith(("!", "&", "https://"))):
+        if(message.author.bot != True and "https://" not in message.content and not message.content.startswith(("!", "&", ))):
             await self.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ',
                                     message.created_at,
                                     message.clean_content,
@@ -53,8 +55,8 @@ async def ping(ctx):
 @commands.has_role('memelord')
 async def getchannelhistory(ctx):
     channel = ctx.message.channel
-    async for ctx.message in channel.history(limit=30000):
-        if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://"))):
+    async for ctx.message in channel.history(limit=600000):
+        if(ctx.message.author.bot != True and not ctx.message.content.startswith(("!", "&", "https://")) and len(ctx.message.clean_content) > 5):
             await bot.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING',
                                    ctx.message.created_at,
                                    ctx.message.clean_content,

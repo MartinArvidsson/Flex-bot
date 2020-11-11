@@ -3,6 +3,8 @@
 
 from discord.ext import commands
 import discord
+intents = discord.Intents.default()
+intents.members = True
 import config
 
 class BetterMember(commands.Converter):
