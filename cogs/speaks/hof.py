@@ -2,10 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
-import discord
-import config
-import markovify
-import functools
 import random
 
 

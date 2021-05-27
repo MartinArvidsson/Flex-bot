@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from discord.ext import commands
-from .utils.converters import BetterMember
+from ..utils.converters import BetterMember
 from random import randrange
 import discord
 intents = discord.Intents.default()
