@@ -5,7 +5,7 @@ from discord.ext import commands
 import random
 
 
-class speak(commands.Cog):
+class HallOfFame(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -23,4 +23,4 @@ class speak(commands.Cog):
         await ctx.send("\N{TROPHY}***Hall of fame***\N{TROPHY}\n" + hofmsg['content'])
 
 def setup(bot):
-    bot.add_cog(speak(bot))
+    bot.add_cog(HallOfFame(bot))
