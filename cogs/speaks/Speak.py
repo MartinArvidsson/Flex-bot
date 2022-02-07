@@ -27,7 +27,7 @@ class Speak(commands.Cog):
         elif len(args) == 1:
             # If the user only provided one argument, we need to check if
             # The argument is repeats or a member to generate sentences from
-            if args[0].isdigit() and int(args[0]) < 1000:
+            if args[0].isdigit() and int(args[0]) < 20:
                 user = ctx.author
                 repeats = int(args[0])
             else:
@@ -35,7 +35,7 @@ class Speak(commands.Cog):
                 repeats = 5
         else:
             a, b, *_ = args
-            if a.isdigit() and int(a) < 1000:
+            if a.isdigit() and int(a) < 20:
                 # A is probably repeats
                 repeats = int(a)
                 user = await self.member_converter.convert(ctx, b)

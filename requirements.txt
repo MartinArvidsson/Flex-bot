@@ -15,7 +15,7 @@ emoji
 idna
 isort
 lazy-object-proxy
-markovify
+markovify>=0.9.3
 mccabe
 multidict
 pipenv

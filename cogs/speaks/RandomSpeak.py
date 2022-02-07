@@ -2,12 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import functools
-import random
-import sys
-from inspect import getmembers
-from random import randrange
-
-import markovify
 from discord.ext import commands
 
 from ..speakutils.GenerateSingleSpeak import GenerateSpeak
@@ -24,9 +18,9 @@ class Randomspeak(commands.Cog):
         self.generateSpeak = GenerateSpeak()
         self.getRandomMember = GetRandomMember()
 
+
     @commands.group(invoke_without_command=True, case_insensitive=True, name="rspeak", aliases=["rs"])
     async def rspeak(self, ctx):
-        
         userId = await self.getRandomMember.getMemberId(self.bot)
         record = await self.getMessages.getmessages(ctx, self.bot, userId)
         thing = functools.partial(
