@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from ..speakutils.get_messages import GetMessages
-from ..speakutils.generate_pairspeak import GeneratePairspeak
+from ..speakutils.GetMessages import GetMessages
+from ..speakutils.GeneratePairspeak import GeneratePairspeak
 import markovify
 import config
 from random import randrange

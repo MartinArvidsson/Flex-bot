@@ -5,8 +5,8 @@ import functools
 
 from discord.ext import commands
 
-from ..speakutils.generate_single_speak import GenerateSpeak
-from ..speakutils.get_messages import GetMessages
+from ..speakutils.GenerateSingleSpeak import GenerateSpeak
+from ..speakutils.GetMessages import GetMessages
 from ..utils.converters import BetterMember
 
 

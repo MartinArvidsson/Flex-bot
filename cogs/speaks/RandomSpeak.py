@@ -10,8 +10,8 @@ from random import randrange
 import markovify
 from discord.ext import commands
 
-from ..speakutils.generate_single_speak import GenerateSpeak
-from ..speakutils.get_messages import GetMessages
+from ..speakutils.GenerateSingleSpeak import GenerateSpeak
+from ..speakutils.GetMessages import GetMessages
 from ..speakutils.GetRandomMember import GetRandomMember
 from ..utils.converters import BetterMember
 
