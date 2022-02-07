@@ -28,7 +28,8 @@ class GeneratePairspeak():
         repeats = min(repeats, 20)
         for _ in range(repeats):
             try:
-                variablename = combined_models.make_short_sentence(randrange(60,130),tries=50)
+                variablename = combined_models.make_short_sentence(
+                    140, tries=50)
                 speech += "{}\n\n".format(variablename)
             except:
                 continue

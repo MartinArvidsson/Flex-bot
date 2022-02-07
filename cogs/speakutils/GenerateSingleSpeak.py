@@ -32,7 +32,7 @@ class GenerateSpeak():
         if repeats is None:
             try:
                 variablename = text_model.make_short_sentence(
-                    randrange(60, 130), tries=50)
+                    140, tries=50)
                 speech += "{}\n\n".format(variablename)
             except Exception as e:
                 return e
@@ -40,7 +40,7 @@ class GenerateSpeak():
             for _ in range(repeats):
                 try:
                     variablename = text_model.make_short_sentence(
-                        randrange(60, 130), tries=50)
+                        140, tries=50)
                     speech += "{}\n\n".format(variablename)
                 except:
                     continue

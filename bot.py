@@ -32,7 +32,7 @@ class Bot(commands.Bot):
             await self.change_presence(status=discord.Status.online, activity=activity)
 
     async def on_message(self, message):
-        if(message.author.bot != True and "https://" not in message.content and not message.content.startswith(("!", "&", ))):
+        if(message.author.bot != True and "https://" not in message.content and not message.content.startswith(("!", "&", )) and len(message.clean_content) > 60):
             await self.pool.execute('INSERT INTO flexbot.messages VALUES($1, $2, $3, $4, $5, $6) ',
                                     message.created_at,
                                     message.clean_content,
