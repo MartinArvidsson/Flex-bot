@@ -15,32 +15,32 @@ intents = discord.Intents.default()
 
 class GenerateSpeak():
     def sync_speak(self, ctx, record, userId, repeats=None):
-        text = '\n'.join([x[0] for x in record if len(x[0]) > 100])
+
+        #Use nickname if possible else use username
+        if not ctx.guild.get_member(userId).nick.__eq__('None'):
+            username = ctx.guild.get_member(userId).nick
+        else:
+            username = ctx.guild.get_member(userId).name
+        speech = "**{}:**\n".format(username)
+
+        #Generate text model
+        text = '\n'.join([x[0] for x in record if len(x[0]) > 20])
         try:
-            text_model = markovify.NewlineText(text, state_size=2)
+            text_model = markovify.NewlineText(text)
         except Exception as e:
             return e
-        speech = "**{}:**\n".format(ctx.guild.get_member(userId).nick)
-        if repeats is None:
-            try:
-                text_model = markovify.NewlineText(text, state_size=2)
-            except Exception as e:
-                return e
-        else:
-            repeats = min(repeats, 20)
 
+        #Generate sentences from model depending on how many repeats was provided
         if repeats is None:
             try:
-                variablename = text_model.make_short_sentence(
-                    140, tries=50)
+                variablename = text_model.make_sentence(tries=100)
                 speech += "{}\n\n".format(variablename)
             except Exception as e:
                 return e
         else:
             for _ in range(repeats):
                 try:
-                    variablename = text_model.make_short_sentence(
-                        140, tries=50)
+                    variablename = text_model.make_sentence(tries=100)
                     speech += "{}\n\n".format(variablename)
                 except:
                     continue

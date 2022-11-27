@@ -69,7 +69,6 @@ class Pairspeak(commands.Cog):
         speech = await self.bot.loop.run_in_executor(None, thing)
         if speech == -1:
             return await ctx.send("not enough content")
-
         await ctx.send(speech)
 
 

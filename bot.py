@@ -70,6 +70,7 @@ if __name__ == '__main__':
     pool = loop.run_until_complete(asyncpg.create_pool(
         f"postgresql://{config.db_user}:{config.db_password}@127.0.0.1:5432/flexbot", command_timeout=60, min_size=4, max_size=10))
     bot.pool = pool
+    bot.pool.execute('CREATE EXTENSION tsm_system_rows')
 
 bot.run(config.token)
 
