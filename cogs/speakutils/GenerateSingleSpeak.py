@@ -26,7 +26,7 @@ class GenerateSpeak():
         #Generate text model
         text = '\n'.join([x[0] for x in record if len(x[0]) > 20])
         try:
-            text_model = markovify.NewlineText(text)
+            text_model = markovify.NewlineText(text, config.statesize)
         except Exception as e:
             return e
 

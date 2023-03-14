@@ -34,8 +34,8 @@ class GeneratePairspeak():
         
         #Combine the two models according to markovify 
         try:
-            text_model_one = markovify.NewlineText(firstText, state_size=2)
-            text_model_two = markovify.NewlineText(secondText, state_size=2)
+            text_model_one = markovify.NewlineText(firstText, config.statesize)
+            text_model_two = markovify.NewlineText(secondText, config.statesize)
             combined_models = markovify.combine([text_model_one,text_model_two])
         except Exception as e:
             print(e)
