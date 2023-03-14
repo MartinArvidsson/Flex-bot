@@ -33,14 +33,14 @@ class GenerateSpeak():
         #Generate sentences from model depending on how many repeats was provided
         if repeats is None:
             try:
-                variablename = text_model.make_sentence(tries=100)
+                variablename = text_model.make_sentence()
                 speech += "{}\n\n".format(variablename)
             except Exception as e:
                 return e
         else:
             for _ in range(repeats):
                 try:
-                    variablename = text_model.make_sentence(tries=100)
+                    variablename = text_model.make_sentence()
                     speech += "{}\n\n".format(variablename)
                 except:
                     continue

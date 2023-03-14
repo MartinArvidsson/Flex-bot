@@ -47,18 +47,18 @@ class Pairspeak(commands.Cog):
             except:
                 return await ctx.send("no person with that name, did you write it correctly?")
             repeats = 5
-        else:
-            a, b, *_ = args
-            if a.isdigit() and int(a) < 1000:
-                # A is probably repeats
-                repeats = int(a)
-                user = await member_converter.convert(ctx, b)
-            else:
-                try:
-                    repeats = int(b)
-                except ValueError:
-                    return await ctx.send("too many arguments?")
-                user = await member_converter.convert(ctx, a)
+        # else:
+        #     a, b, *_ = args
+        #     if a.isdigit() and int(a) < 1000:
+        #         # A is probably repeats
+        #         repeats = int(a)
+        #         user = await member_converter.convert(ctx, b)
+        #     else:
+        #         try:
+        #             repeats = int(b)
+        #         except ValueError:
+        #             return await ctx.send("too many arguments?")
+        #         user = await member_converter.convert(ctx, a)
 
         firstRecord = await self.getMessages.getmessages(ctx, self.bot, user.id)
 
