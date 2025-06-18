@@ -30,5 +30,5 @@ class Singlespeak(commands.Cog):
         await ctx.send(speech)
 
 
-def setup(bot):
-    bot.add_cog(Singlespeak(bot))
+async def setup(bot):
+    await bot.add_cog(Singlespeak(bot))

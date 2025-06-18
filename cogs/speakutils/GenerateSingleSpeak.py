@@ -7,15 +7,12 @@ from random import randrange
 import discord
 import config
 import markovify
-import functools
 intents = discord.Intents.default()
-
 # Uses the Messages gathered from GetMessages to generate a random sentence
 
 
 class GenerateSpeak():
     def sync_speak(self, ctx, record, userId, repeats=None):
-
         #Use nickname if possible else use username
         if not ctx.guild.get_member(userId).nick.__eq__('None'):
             username = ctx.guild.get_member(userId).nick
@@ -26,7 +23,7 @@ class GenerateSpeak():
         #Generate text model
         text = '\n'.join([x[0] for x in record if len(x[0]) > 20])
         try:
-            text_model = markovify.NewlineText(text)
+            text_model = markovify.NewlineText(text,config.statesize)
         except Exception as e:
             return e
 

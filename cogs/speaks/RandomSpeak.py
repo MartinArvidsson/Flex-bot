@@ -9,6 +9,8 @@ from ..speakutils.GetMessages import GetMessages
 from ..speakutils.GetRandomMember import GetRandomMember
 from ..utils.converters import BetterMember
 
+#Adam den andre, Filip
+blacklisted_users = [239052940290162689,109043103238762496]
 
 class Randomspeak(commands.Cog):
     def __init__(self, bot):
@@ -21,7 +23,7 @@ class Randomspeak(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True, name="rspeak", aliases=["rs"])
     async def rspeak(self, ctx):
-        userId = await self.getRandomMember.getMemberId(self.bot)
+        userId = await self.get_valid_member_id()
         record = await self.getMessages.getmessages(ctx, self.bot, userId)
         thing = functools.partial(
             self.generateSpeak.sync_speak, ctx, record, userId)
@@ -31,5 +33,11 @@ class Randomspeak(commands.Cog):
 
         await ctx.send(speech)
 
-def setup(bot):
-    bot.add_cog(Randomspeak(bot))
+    async def get_valid_member_id(self):
+        userId = await self.getRandomMember.getMemberId(self.bot)
+        while userId in blacklisted_users:
+            userId = await self.getRandomMember.getMemberId(self.bot)
+        return userId
+
+async def setup(bot):
+    await bot.add_cog(Randomspeak(bot))

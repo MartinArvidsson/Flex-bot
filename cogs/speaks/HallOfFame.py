@@ -12,7 +12,7 @@ class HallOfFame(commands.Cog):
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def hof(self, ctx):
 
-        query = "select * from flexbot.messages where channel_id = '492245343430508544' order by timestamp desc"
+        query = "select * from flexbot.messages where channel_id = '492245343430508544'"
         try:
             record = await self.bot.pool.fetch(query, timeout=5.0)
         except AttributeError:
@@ -22,5 +22,5 @@ class HallOfFame(commands.Cog):
         hofmsg = random.choice(record)
         await ctx.send("\N{TROPHY}***Hall of fame***\N{TROPHY}\n" + hofmsg['content'])
 
-def setup(bot):
-    bot.add_cog(HallOfFame(bot))
+async def setup(bot):
+    await bot.add_cog(HallOfFame(bot))
